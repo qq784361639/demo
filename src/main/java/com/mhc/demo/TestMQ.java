@@ -103,8 +103,6 @@ public class TestMQ {
         System.out.printf("Consumer Started.%n");
 
 
-
-
     }
 
 }
