@@ -60,8 +60,6 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.shutdown();
-
-
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test");
 
         // Specify name server addresses.
