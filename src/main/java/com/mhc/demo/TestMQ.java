@@ -32,9 +32,9 @@ public class TestMQ {
         user1.setName("zhangsan");
         user1.setPassword("123456");
         User user2 = new User();
-        user1.setName("lisi");
-        user1.setPassword("123456");
-        MessageProducer messageProducer = new MessageProducer();
+        user2.setName("lisi");
+        user2.setPassword("123456");
+
         DefaultMQProducer producer = new DefaultMQProducer("local_pufang_producer");
         // Specify name server addresses.
         producer.setNamesrvAddr("172.21.10.116:9876");
@@ -46,7 +46,7 @@ public class TestMQ {
         }
         producer.setRetryTimesWhenSendAsyncFailed(0);
         Message build1 = MessageBuilder.of(user1).topic("xiangzi_test").tag("syn_test").build();
-        Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test").build();
+        Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test1").build();
         try {
             producer.send(build1);
             producer.send(build2);
@@ -60,6 +60,10 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.shutdown();
+
+
+
+
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test");
 
         // Specify name server addresses.
@@ -67,7 +71,7 @@ public class TestMQ {
 
         // Subscribe one more more topics to consume.
         try {
-            consumer.subscribe("xiangzi_test", "*");
+            consumer.subscribe("xiangzi_test", "syn_test1 || syn_test");
         } catch (MQClientException e) {
             e.printStackTrace();
         }
@@ -82,14 +86,14 @@ public class TestMQ {
 
                 try {
                     xiangzi_test = consumer.viewMessage("xiangzi_test",msgs.get(0).getMsgId());
+                    byte[] body = xiangzi_test.getBody();
+                    String str= new String (body);
+                    User user = JSONObject.parseObject(str, User.class);
+                    System.out.println(user);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                byte[] body = xiangzi_test.getBody();
-                    String str= new String (body);
-                    User user1 = JSONObject.parseObject(str, User.class);
-                    System.out.println(user1);
-
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
