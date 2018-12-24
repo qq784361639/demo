@@ -1,0 +1,13 @@
+mhc:
+job:
+zookeeper:
+servers: 172.21.10.42:2181,172.21.10.43:2181
+namespace: mhc-job-example
+TestTask:
+cron: 0/1 * * * * ?
+
+camaro:
+  mq:
+    name-server-address: 172.21.10.116:9876
+    producer-group: local_pufang_producer
+    ## 案例：PG_WMS_MCLAREN_DEV   ## 已经配置过了暂时先可以不用按照这个规则
