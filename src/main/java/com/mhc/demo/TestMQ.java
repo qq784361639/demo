@@ -28,9 +28,12 @@ public class TestMQ {
     private MessageProducer messageProducer;
 
     public static void main(String[] args) {
-        User user = new User();
-        user.setName("zhangsan");
-        user.setPassword("123456");
+        User user1 = new User();
+        user1.setName("zhangsan");
+        user1.setPassword("123456");
+        User user2 = new User();
+        user1.setName("lisi");
+        user1.setPassword("123456");
         MessageProducer messageProducer = new MessageProducer();
         DefaultMQProducer producer = new DefaultMQProducer("local_pufang_producer");
         // Specify name server addresses.
@@ -42,12 +45,11 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.setRetryTimesWhenSendAsyncFailed(0);
-        Message build = MessageBuilder.of(user).topic("xiangzi_test").tag("syn_test").build();
+        Message build1 = MessageBuilder.of(user1).topic("xiangzi_test").tag("syn_test").build();
+        Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test").build();
         try {
-            producer.send(build);
-            producer.send(build);
-            producer.send(build);
-            producer.send(build);
+            producer.send(build1);
+            producer.send(build2);
         } catch (MQClientException e) {
             e.printStackTrace();
         } catch (RemotingException e) {
@@ -101,9 +103,6 @@ public class TestMQ {
             e.printStackTrace();
         }
         System.out.printf("Consumer Started.%n");
-
-
-
 
 
 
