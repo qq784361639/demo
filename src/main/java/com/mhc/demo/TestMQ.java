@@ -14,6 +14,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,11 +46,13 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.setRetryTimesWhenSendAsyncFailed(0);
+        List<Message> list = new ArrayList<>();
         Message build1 = MessageBuilder.of(user1).topic("xiangzi_test").tag("syn_test").build();
-        Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test1").build();
+        Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test").build();
+        list.add(build1);
+        list.add(build2);
         try {
-            producer.send(build1);
-            producer.send(build2);
+            producer.send(list);
         } catch (MQClientException e) {
             e.printStackTrace();
         } catch (RemotingException e) {
@@ -64,7 +67,7 @@ public class TestMQ {
 
 
 
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test1");
 
         // Specify name server addresses.
         consumer.setNamesrvAddr("172.21.10.116:9876");
