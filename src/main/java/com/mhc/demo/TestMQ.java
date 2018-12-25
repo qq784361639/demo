@@ -64,9 +64,6 @@ public class TestMQ {
         }
         producer.shutdown();
 
-
-
-
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test1");
 
         // Specify name server addresses.
