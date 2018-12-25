@@ -14,6 +14,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,9 +33,9 @@ public class TestMQ {
         user1.setName("zhangsan");
         user1.setPassword("123456");
         User user2 = new User();
-        user1.setName("lisi");
-        user1.setPassword("123456");
-        MessageProducer messageProducer = new MessageProducer();
+        user2.setName("lisi");
+        user2.setPassword("123456");
+
         DefaultMQProducer producer = new DefaultMQProducer("local_pufang_producer");
         // Specify name server addresses.
         producer.setNamesrvAddr("172.21.10.116:9876");
@@ -45,11 +46,13 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.setRetryTimesWhenSendAsyncFailed(0);
+        List<Message> list = new ArrayList<>();
         Message build1 = MessageBuilder.of(user1).topic("xiangzi_test").tag("syn_test").build();
         Message build2 = MessageBuilder.of(user2).topic("xiangzi_test").tag("syn_test").build();
+        list.add(build1);
+        list.add(build2);
         try {
-            producer.send(build1);
-            producer.send(build2);
+            producer.send(list);
         } catch (MQClientException e) {
             e.printStackTrace();
         } catch (RemotingException e) {
@@ -60,14 +63,18 @@ public class TestMQ {
             e.printStackTrace();
         }
         producer.shutdown();
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test");
+
+
+
+
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test1");
 
         // Specify name server addresses.
         consumer.setNamesrvAddr("172.21.10.116:9876");
 
         // Subscribe one more more topics to consume.
         try {
-            consumer.subscribe("xiangzi_test", "*");
+            consumer.subscribe("xiangzi_test", "syn_test1 || syn_test");
         } catch (MQClientException e) {
             e.printStackTrace();
         }
@@ -84,14 +91,14 @@ public class TestMQ {
 
                 try {
                     xiangzi_test = consumer.viewMessage("xiangzi_test",msgs.get(0).getMsgId());
+                    byte[] body = xiangzi_test.getBody();
+                    String str= new String (body);
+                    User user = JSONObject.parseObject(str, User.class);
+                    System.out.println(user);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                byte[] body = xiangzi_test.getBody();
-                    String str= new String (body);
-                    User user1 = JSONObject.parseObject(str, User.class);
-                    System.out.println(user1);
-
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
