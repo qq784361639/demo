@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
  */
 //# 简单作业任务
 @Component
-@MHCJobConfig(cron = "1 * * * * ?",name="TestTask", streamingProcess = false, overwrite = true, shardingTotalCount = 2, shardingItemParameters = "0=A,1=B")
+@MHCJobConfig(cron = "0/5 * * * * ?",name="TestTask", streamingProcess = false, overwrite = true, shardingTotalCount = 2, shardingItemParameters = "0=A,1=B")
 public class TestTask implements SimpleJob {
     @Autowired
     MessageProducer messageProducer;
