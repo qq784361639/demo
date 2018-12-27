@@ -16,11 +16,11 @@ import java.util.Map;
  */
 @Component
 @Slf4j
-@MQConsumer(topic = "xiangzi_test", consumerGroup = "CID_test", tag="syn_test")
+@MQConsumer(topic = "xiangzi_test", consumerGroup = "CID_test", tag="syn_test1")
 public class MessageConsumer extends AbstractMQPushConsumer<User> {
     @Override
     public boolean process(User user, Map<String, Object> map) {
         System.out.println(user.toString());
-        return false;
+        return true;
     }
 }

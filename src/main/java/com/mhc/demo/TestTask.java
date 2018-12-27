@@ -16,9 +16,6 @@ public class TestTask implements SimpleJob {
 
     @Override
     public void execute(ShardingContext shardingContext) {
-        if (shardingContext.getShardingItem()==1){
-            System.out.println("测试"+shardingContext.getShardingParameter());
-        }
-
+        System.out.println("测试"+shardingContext.getShardingParameter());
     }
 }

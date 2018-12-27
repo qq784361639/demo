@@ -10,6 +10,6 @@ import com.camaro.starter.mq.base.AbstractMQProducer;
  * @Date: 2018/12/24 10:31
  * @since V1.0.0
  */
-@MQProducer
-public class MessageProducer extends AbstractMQProducer {
-}
+//@MQProducer
+//public class MessageProducer extends AbstractMQProducer {
+//}
