@@ -21,6 +21,6 @@ public class MessageConsumer extends AbstractMQPushConsumer<User> {
     @Override
     public boolean process(User user, Map<String, Object> map) {
         System.out.println(user.toString());
-        return false;
+        return true;
     }
 }

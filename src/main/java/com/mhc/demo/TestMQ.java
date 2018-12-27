@@ -64,49 +64,49 @@ public class TestMQ {
         }
         producer.shutdown();
 
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test1");
-
-        // Specify name server addresses.
-        consumer.setNamesrvAddr("172.21.10.116:9876");
-
-        // Subscribe one more more topics to consume.
-        try {
-            consumer.subscribe("xiangzi_test", "syn_test1 || syn_test");
-        } catch (MQClientException e) {
-            e.printStackTrace();
-        }
-        // Register callback to execute on arrival of messages fetched from brokers.
-        consumer.registerMessageListener(new MessageListenerConcurrently() {
-
-
-
-            @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-                                                            ConsumeConcurrentlyContext context) {
-                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
-                MessageExt xiangzi_test = null;
-
-                try {
-                    xiangzi_test = consumer.viewMessage("xiangzi_test",msgs.get(0).getMsgId());
-                    byte[] body = xiangzi_test.getBody();
-                    String str= new String (body);
-                    User user = JSONObject.parseObject(str, User.class);
-                    System.out.println(user);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
-            }
-        });
-
-        //Launch the consumer instance.
-        try {
-            consumer.start();
-        } catch (MQClientException e) {
-            e.printStackTrace();
-        }
-        System.out.printf("Consumer Started.%n");
+//        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("CID_test1");
+//
+//        // Specify name server addresses.
+//        consumer.setNamesrvAddr("172.21.10.116:9876");
+//
+//        // Subscribe one more more topics to consume.
+//        try {
+//            consumer.subscribe("xiangzi_test", "syn_test1 || syn_test");
+//        } catch (MQClientException e) {
+//            e.printStackTrace();
+//        }
+//        // Register callback to execute on arrival of messages fetched from brokers.
+//        consumer.registerMessageListener(new MessageListenerConcurrently() {
+//
+//
+//
+//            @Override
+//            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
+//                                                            ConsumeConcurrentlyContext context) {
+//                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
+//                MessageExt xiangzi_test = null;
+//
+//                try {
+//                    xiangzi_test = consumer.viewMessage("xiangzi_test",msgs.get(0).getMsgId());
+//                    byte[] body = xiangzi_test.getBody();
+//                    String str= new String (body);
+//                    User user = JSONObject.parseObject(str, User.class);
+//                    System.out.println(user);
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
+//            }
+//        });
+//
+//        //Launch the consumer instance.
+//        try {
+//            consumer.start();
+//        } catch (MQClientException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.printf("Consumer Started.%n");
 
 
     }
